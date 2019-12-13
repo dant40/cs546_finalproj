@@ -10,11 +10,11 @@ const users = require("./users");
 
 //author is just the corresponding user_id
 //content is self-explanatory
-async function create(author,content){
+async function create(author,content) {
     if(author == undefined || content == undefined)
-        throw new Error ("Error, must specify user and post content")
+        return Promise.reject("Error, must specify user and post content");
     //not enforcing anything about the types of these, assume they are used right
-    var col = await posts()
+    var col = await posts();
    
     var temp = {
         _id: new ObjectID(),
@@ -26,56 +26,53 @@ async function create(author,content){
            // likedBy: []
         },
         comments: []
-    }
+    };
 
     const insertInfo = await col.insertOne(temp);
     if (insertInfo.insertedCount === 0) 
-        throw new Error ("Could not create post");
-    return temp 
+        return Promise.reject("Could not create post");
+    return temp;
 }
 
-async function getAll(){
+async function getAll() {
     var col = await posts();
     var cur = await col.find();
     return cur.toArray();
 }
 
-async function get(id){
-
+async function get(id) {
     if(id === undefined)
-        throw new Error ("Please enter an id")
+        return Promise.reject("Please enter an id");
     var col = await posts();
-    var temp = await col.findOne({_id: ObjectID(id)})
+    var temp = await col.findOne({_id: ObjectID(id)});
     if(temp === null)
-        throw new Error ("No posts found")
-
+        return Promise.reject("No posts found");
     return temp;
 }
 
 //THIS SHOULD ALWAYS BE CALLED WITH deletePostFromUser
-async function remove(id){
-
+async function remove(id) {
     if(id === undefined)
-        throw new Error ( "Please enter an id")
-    
+        return Promise.reject "Please enter an id")
+
     var col = await posts();
-    var temp = await this.get(id)
+    var temp = await this.get(id);
     const deletionInfo = await col.removeOne(temp);
 
     if (deletionInfo.deletedCount === 0) {
-        throw new Error (`Could not delete post with id of ${id}`);
+        return Promise.reject(`Could not delete post with id of ${id}`);
     }
     var result = {
         deleted: true,
         data: temp
-    }
-    return result
+    };
+    return result;
 }
 
 //This doesn't handle keeping a list of the users who've liked this yet 
 async function likePostById(id){
-    if(id === undefined )
-    throw new Error ("Please enter id")
+    if(id === undefined)
+        return Promise.reject("Please enter id")
 
     // if(typeof(id)!== 'string')
     //     throw new Error ("Invalid input type!")
@@ -83,24 +80,25 @@ async function likePostById(id){
     var col = await posts();
     
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$inc : {"likes.amount": 1 }});
-        if (updateInfo.modifiedCount === 0) {
-          throw new Error ( "Could not perform post addition successfully");
-        }
-      return await this.get(id)
+    if (updateInfo.modifiedCount === 0) {
+        return Promise.reject( "Could not perform post addition successfully");
+    }
+    return await this.get(id);
 }
+
 //Does not enforce comment format
 //Expected to have: _id, date,author(user_id), content 
 //Liking comments NYI
 async function commentOnPostById(id,comment){
-    if(id === undefined || comment === undefined )
-    throw new Error ("Please enter id")
+    if(id === undefined || comment === undefined)
+        return Promise.reject("Please enter id");
 
     var col = await posts();
     
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$push : {"comments": comment }});
-        if (updateInfo.modifiedCount === 0) {
-          throw new Error ( "Could not perform post addition successfully");
-        }
+    if (updateInfo.modifiedCount === 0) {
+        return Promise.reject("Could not perform post addition successfully");
+    }
     
    return await this.get(id); 
 }
