@@ -2,6 +2,12 @@
     const users = mongoCollections.users;
     const ObjectID = require('mongodb').ObjectID;
 
+    //contains following:
+    //create user, delete user, get all users, get user by id
+    // add post to user, delete post from user, change name in user profile
+    //Not adding a get all post by user option, since posts already should be in a user
+    //see database proposal document for reference
+
     //incoming password is expected to be hashed
     async function create(username,hashedPassword){
         if(name == undefined || hashedPassword == undefined)
@@ -95,10 +101,11 @@
         
         return await this.get(id);
     }
-    //assumes post passed in is valid
+    //assumes post passed in is valid, post should be the entire object
+    //EVERYTIME A POST IS MADE THIS SHOULD BE CALLED
     async function addPostToUser(id, post){
         if(id === undefined || post === undefined)
-        throw new Error ("Please enter and id and a new name")
+        throw new Error ("Please enter id and post")
     //doesn't enforce anything on the post as of now
         if(typeof(id)!== 'string')
             throw new Error ("Invalid input type!")
@@ -113,12 +120,11 @@
         return await this.get(id);
     }
 
-    async function deletePost(id,post_id){
-        if(id === undefined || post === undefined)
-        throw new Error ("Please enter and id and a new name")
+    async function deletePostFromUser(id,post_id){
+        if(id === undefined || post_id === undefined)
+        throw new Error ("Please enter id and post_id")
     //doesn't enforce anything on the post as of now
-        if(typeof(id)!== 'string')
-            throw new Error ("Invalid input type!")
+      
     
         var col = await users();
         
@@ -130,6 +136,17 @@
         return await this.get(id);
     }
 
+    //For interal use by posts.js only
+    async function updatePostById(id,newPost){
+        if(id === undefined || newPost === undefined)
+        throw new Error ("Please enter id and newPost")
+        //doesn't enforce anything on the post as of now
+        //This is a inefficient way of doing this, but it'll stay for now
+        deletePostFromUser(id,newPost.id)
+        addPostToUser(id,newPost)
+        return await this.get(id);
+    }
+
     module.exports = {
     create: create,
     getAll: getAll,
@@ -137,5 +154,6 @@
     remove: remove,
     setProfileName: setProfileName,
     addPostToUser: addPostToUser,
-    deletePost: deletePost
+    deletePostFromUser: deletePostFromUser,
+    updatePostById: updatePostById
     }
