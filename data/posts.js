@@ -53,7 +53,7 @@ async function get(id) {
 //THIS SHOULD ALWAYS BE CALLED WITH deletePostFromUser
 async function remove(id) {
     if(id === undefined)
-        return Promise.reject "Please enter an id")
+        return Promise.reject("Please enter an id")
 
     var col = await posts();
     var temp = await this.get(id);
@@ -81,7 +81,7 @@ async function likePostById(id){
     
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$inc : {"likes.amount": 1 }});
     if (updateInfo.modifiedCount === 0) {
-        return Promise.reject( "Could not perform post addition successfully");
+        return Promise.reject("Could not perform post addition successfully");
     }
     return await this.get(id);
 }
