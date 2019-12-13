@@ -11,16 +11,16 @@ const users = require("./users");
 //author is just the corresponding user_id
 //content is self-explanatory
 async function create(author,content){
-    if(author == undefined || location == undefined || content == undefined)
+    if(author == undefined || content == undefined)
         throw new Error ("Error, must specify user and post content")
     //not enforcing anything about the types of these, assume they are used right
     var col = await posts()
    
     var temp = {
-        _id: ObjectID.generate(),
+        _id: new ObjectID(),
         date: new Date(),
         author: author,
-        conent: content,
+        content: content,
         likes: {
             amount: 0,
            // likedBy: []
@@ -86,12 +86,7 @@ async function likePostById(id){
         if (updateInfo.modifiedCount === 0) {
           throw new Error ( "Could not perform post addition successfully");
         }
-    
-   const res  = await this.get(id); 
-   try {
-       await users.updatePostById(res.author,res)
-    }catch(e) { throw new Error ("Warning: Post update not reflected in user")}
-   return res
+      return await this.get(id)
 }
 //Does not enforce comment format
 //Expected to have: _id, date,author(user_id), content 
@@ -107,11 +102,7 @@ async function commentOnPostById(id,comment){
           throw new Error ( "Could not perform post addition successfully");
         }
     
-   const res  = await this.get(id); 
-   try {
-       await users.updatePostById(res.author,res)
-    }catch(e) { throw new Error ("Warning: Post update not reflected in user")}
-   return res
+   return await this.get(id); 
 }
 
 

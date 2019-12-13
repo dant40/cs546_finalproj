@@ -27,6 +27,7 @@
     "request-promise": "^2.0.0",
     "express-session": "^1.17.0",
     "express-handlebars": "^3.1.0",
+    "handlebars": "^4.0.5",
     "mongodb": "^2.1.18"
   }
 }

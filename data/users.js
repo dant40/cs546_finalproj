@@ -10,16 +10,17 @@
 
     //incoming password is expected to be hashed
     async function create(username,hashedPassword){
-        if(name == undefined || hashedPassword == undefined)
+        if(username == undefined || hashedPassword == undefined)
             throw new Error ("Needs a username / password to create user")
             //not enforcing anything for password yet for testing
-        if(typeof(name) !== 'string' )
+        if(typeof(username) !== 'string' )
             throw new Error ("Invalid input types!")
 
         var col = await users()
         //idk how sessionid should work
+        const _id = new ObjectID()
         var temp = {
-            _id: ObjectID.generate(),
+            _id: _id,
             username: username,
             hashedPassword: hashedPassword,
             sessionid: "",
@@ -52,9 +53,6 @@
         if(id === undefined)
             throw new Error ("Please enter an id")
 
-        if(typeof(id)!== 'string')
-            throw new Error ("Invalid id type!")
-
         var col = await users();
         var temp = await col.findOne({_id: ObjectID(id)})
         if(temp === null)
@@ -68,9 +66,7 @@
         if(id === undefined)
             throw new Error ( "Please enter an id")
 
-        if(typeof(id)!== 'string')
-            throw new Error ( "Invalid id type!")
-
+     
         var col = await users();
         var temp = await this.get(id)
         const deletionInfo = await col.removeOne(temp);
@@ -89,7 +85,7 @@
         if(id === undefined || newName === undefined)
         throw new Error ("Please enter and id and a new name")
     
-        if(typeof(id)!== 'string' || typeof(newName) !== 'string')
+        if( typeof(newName) !== 'string')
             throw new Error ("Invalid input type!")
     
         var col = await users();
@@ -107,17 +103,17 @@
         if(id === undefined || post === undefined)
         throw new Error ("Please enter id and post")
     //doesn't enforce anything on the post as of now
-        if(typeof(id)!== 'string')
-            throw new Error ("Invalid input type!")
-    
+   
         var col = await users();
         
         const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$push : {"profile.posts": post }});
             if (updateInfo.modifiedCount === 0) {
               throw new Error ( "Could not perform post addition successfully");
             }
-        
-        return await this.get(id);
+            try {
+                return await this.get(id);
+            }
+            catch(e) {return}
     }
 
     async function deletePostFromUser(id,post_id){
@@ -128,21 +124,25 @@
     
         var col = await users();
         
-        const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts": { $in: post} }});
+        const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts":  {_id: post_id } } });
             if (updateInfo.modifiedCount === 0) {
               throw new Error ( "Could not perform post deletion successfully");
             }
         
-        return await this.get(id);
+        try {
+            return await this.get(id);
+        }
+        catch(e) {return}
+
     }
 
-    //For interal use by posts.js only
+    //MUST BE CALLED WHENEVER POST IS LIKED OR COMMENTED ON
     async function updatePostById(id,newPost){
         if(id === undefined || newPost === undefined)
         throw new Error ("Please enter id and newPost")
         //doesn't enforce anything on the post as of now
         //This is a inefficient way of doing this, but it'll stay for now
-        deletePostFromUser(id,newPost.id)
+        deletePostFromUser(id,newPost._id)
         addPostToUser(id,newPost)
         return await this.get(id);
     }
