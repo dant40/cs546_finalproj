@@ -34,6 +34,7 @@ router.post('/register', async(req, res) => {
         // TODO enforce username is unique
         const user = await users.create(username, fullName, password)
 
+        // Redirects the post request including the form content, so the login request should succeed.
         res.redirect('/login');
     }
 });
@@ -82,9 +83,8 @@ router.get('/logout', async(req, res) => {
     }
 });
 
-// Authentication
+// Authentication middleware
 router.all('*', async(req, res, next) => {
-    // Authentication middleware
     if (!sessionAuthenticated(req)) {
         res.status(403).render('auth/login', {
             error: 'You must log in to view private pages'
