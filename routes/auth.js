@@ -62,7 +62,6 @@ router.post('/login', async(req, res) => {
             redirectToDefault(res);
         } catch (e) {
             res.status(401).render('auth/login', {
-                title: "Login",
                 error: e
             });
         }
