@@ -8,7 +8,8 @@ function getPageTitle(req) {
 }
 
 router.get('/profile', async(req, res) => {
-    res.render('profile/profile', {layout: 'nav', title: getPageTitle(req)});
+  let user = await users.get(req.session.username);
+  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req), profile: user});
 });
 
 module.exports = router;
