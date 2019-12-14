@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-Run `npm install` to install node_modules
+Run `npm install` to install node_modules.
 
 ## Running
 
