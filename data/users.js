@@ -2,6 +2,7 @@ const mongoCollections = require("../config/collections.js");
 const users = mongoCollections.users;
 const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
+const saltRounds = 16;
 
 //contains following:
 //create user, delete user, get all users, get user by id
@@ -9,13 +10,16 @@ const bcrypt = require('bcrypt');
 //Not adding a get all post by user option, since posts already should be in a user
 //see database proposal document for reference
 
-//incoming password is expected to be hashed
-async function create(username,hashedPassword) {
-    if(username == undefined || hashedPassword == undefined)
+// displayname is an optional argument, and will default to the value of username
+async function create(username,displayname,password) {
+    if(!username || !password)
         return Promise.reject("Needs a username / password to create user");
         //not enforcing anything for password yet for testing
-    if(typeof(username) !== 'string' )
+    if(typeof(username) !== 'string' || (typeof(displayname)!=='undefined' && typeof(displayname)!=='string'))
         return Promise.reject("Invalid input types!");
+
+    if (!displayname) displayname = username;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     var col = await users()
     //idk how sessionid should work
@@ -23,6 +27,7 @@ async function create(username,hashedPassword) {
     var temp = {
         _id: _id,
         username: username,
+        displayname: displayname,
         hashedPassword: hashedPassword,
         sessionid: "",
         profile: emptyUserProfile(_id,username),
@@ -35,10 +40,11 @@ async function create(username,hashedPassword) {
 }
 
 //helper method
-function emptyUserProfile(id,username) {
+function emptyUserProfile(id,username,displayname) {
     var prof = {
         _id: id,
-        name: username,
+        username: username,
+        name: displayname,
         posts: []
     }
     return prof;
@@ -49,8 +55,8 @@ async function validLogin(username, password) {
     if (!password) return Promise.reject('No password provided');
 
     user = await this.get(username);
-    correctPassword = await bcrypt.compare(password, user.hashedPassword);
-    return correctPassword;
+    passwordCorrect = await bcrypt.compare(password, user.hashedPassword);
+    return passwordCorrect;
 }
 
 async function getAll() {
@@ -73,6 +79,12 @@ async function get(id) {
 
 async function get(username) {
     if (!username) return Promise.reject('No username provided');
+
+    const col = await users();
+    const result = await col.findOne({username: username});
+    if (result === null)
+        return Promise.reject('No users found');
+    return result;
 }
 
 async function remove(id) {
@@ -104,7 +116,7 @@ async function setProfileName(id,newName) {
     
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$set : {"profile.name": newName }});
     if (updateInfo.modifiedCount === 0) {
-        return Promise.reject("Could not update animal successfully");
+        return Promise.reject("Could not update user successfully");
     }
     
     return await this.get(id);

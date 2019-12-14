@@ -7,31 +7,58 @@ function sessionAuthenticated(req) {
     return req.session.username !== undefined;
 }
 
+function redirectToDefault(res) {
+    res.redirect('/profile');
+}
+
+// Register
+router.get('/register', async(req, res) => {
+    if (sessionAuthenticated(req)) {
+        redirectToDefault(res);
+    } else {
+        res.render('auth/register', {});
+    }
+});
+router.post('/register', async(req, res) => {
+    if (sessionAuthenticated(req)) {
+        res.status(403);
+    } else {
+        const names = [];
+        if (req.body.firstName !== undefined) names.push(req.body.firstName)
+        if (req.body.midName !== undefined) names.push(req.body.midName);
+        if (req.body.lastName !== undefined) names.push(req.body.lastName);
+        const fullName = ( names.length==0 ? undefined : names.join(' ') );
+
+        const username = req.body.username;
+        const password = req.body.password;
+        // TODO enforce username is unique
+        const user = await users.create(username, fullName, password)
+
+        res.redirect('/login');
+    }
+});
+
+// Login
 router.get('/login', async(req, res) => {
     if (sessionAuthenticated(req)) {
-        res.render('auth/login', {
-            error: 'You must log out from your current session before changing users'
-        });
+        redirectToDefault(res);
     } else {
         res.render('auth/login', {});
     }
 });
-
 router.post('/login', async(req, res) => {
     if (sessionAuthenticated(req)) {
-        res.render('auth/login', {
-            error: 'You must log out from your current session before changing users'
-        });
+        res.status(403);
     } else {
         const username = req.body.username;
         const password = req.body.password;
 
         try {
-            valid = await users.loginValid(username, password);
+            valid = await users.validLogin(username, password);
             if (!valid) throw 'Incorrect password';
 
             req.session.username = username;
-            res.redirect('/private');
+            redirectToDefault(res);
         } catch (e) {
             res.status(401).render('auth/login', {
                 title: "Login",
@@ -41,6 +68,7 @@ router.post('/login', async(req, res) => {
     }
 });
 
+// Logout
 router.get('/logout', async(req, res) => {
     if (sessionAuthenticated(req)) {
         await req.session.destroy();
@@ -54,6 +82,7 @@ router.get('/logout', async(req, res) => {
     }
 });
 
+// Authentication
 router.all('*', async(req, res, next) => {
     // Authentication middleware
     if (!sessionAuthenticated(req)) {
