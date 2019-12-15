@@ -22,7 +22,7 @@ router.post('/add/:userName', async (req, res) =>  {
   }
 });
 
-router.post('/add/:userName', async (req, res) =>  {
+router.post('/remove/:userName', async (req, res) =>  {
   try {
     let user = await users.removeFriend(await users.getByUsername(req.session.username), await users.getByUsername(req.params.userName));
   } catch (e) { //something goes wrong with removing
