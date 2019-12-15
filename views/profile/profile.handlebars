@@ -5,7 +5,7 @@
 	<textarea rows="5" readonly>{{profile.profile.bio}}</textarea>
 {{else}}
 		<form id="bio-form" method="POST" action="/editBio">
-			<textarea id="bioInfo" name="bioInfo" rows="5" columns="10" placeholder="We see you have not entered a bio, would you like to enter one?">{{profile.profile.bio}}</textarea>
+			<textarea id="bioInfo" name="bioInfo" rows="5" columns="10">{{profile.profile.bio}}</textarea>
 			<input type="submit" value="Submit">
 		</form>
 {{/if}}
