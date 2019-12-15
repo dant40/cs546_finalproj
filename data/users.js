@@ -45,7 +45,8 @@ function emptyUserProfile(id,username,displayname) {
         _id: id,
         username: username,
         name: displayname,
-        posts: []
+        posts: [],
+        bio: "",
     }
     return prof;
 }
@@ -70,7 +71,7 @@ async function get(id) {
         return Promise.reject("Please enter an id");
 
     var col = await users();
-    var temp = await col.findOne({_id: ObjectID(id)})
+    var temp = await col.findOne({_id: ObjectID(id)});
     if(temp === null)
         return Promise.reject("No users found");
 
@@ -176,6 +177,23 @@ async function updatePostById(id,newPost){
     return await this.get(id);
 }
 
+async function editBio(username, bio) {
+    if (username === undefined || bio === undefined) {
+        return Promise.reject("Please enter username and bio");
+    }
+    if( typeof(bio) !== 'string')
+        return Promise.reject("Invalid input type!");
+    let user = await this.getByUsername(username);
+    var col = await users();
+    const updateInfo = await col.updateOne({ _id: ObjectID(user._id) }, {$set : {"profile.bio": bio }});
+    if (updateInfo.modifiedCount === 0) {
+        return Promise.reject("Could not update user successfully");
+    }
+
+    return await this.get(user._id);
+
+}
+
 module.exports = {
     create: create,
     validLogin: validLogin,
@@ -187,6 +205,7 @@ module.exports = {
     deletePostFromUser: deletePostFromUser,
     updatePostById: updatePostById,
     getByDisplayname: getByDisplayname,
-    getByUsername: getByUsername
+    getByUsername: getByUsername,
+    editBio: editBio,
 }
 
