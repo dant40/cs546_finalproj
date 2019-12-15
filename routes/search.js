@@ -9,7 +9,6 @@ router.get('/search', async (req, res) => {
 
 router.post('/search', async(req, res) => {
   let people = await users.getByDisplayname(req.body.search);
-  console.log(people);
   let error = " ";
   if (people.length == 0){
     res.status(404);
