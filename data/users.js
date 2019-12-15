@@ -34,9 +34,9 @@ async function create(username,displayname,password) {
     }
 
     const insertInfo = await col.insertOne(temp);
-    if (insertInfo.insertedCount === 0) 
+    if (insertInfo.insertedCount === 0)
         return Promise.reject("Could not create user");
-    return temp 
+    return temp
 }
 
 //helper method
@@ -87,6 +87,13 @@ async function getByUsername(username) {
     return result;
 }
 
+//function to search for displayname used in post /search, max is the max number of results
+async function getByDisplayname(displayname, max){
+  if (!displayname) return Promise.reject('No displayname provided');
+  const col = await users();
+  return await col.find({"displayname": new RegExp(displayname, 'i')}).toArray();
+}
+
 async function remove(id) {
     if(id === undefined)
         return Promise.reject("Please enter an id");
@@ -113,12 +120,12 @@ async function setProfileName(id,newName) {
         return Promise.reject("Invalid input type!");
 
     var col = await users();
-    
+
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$set : {"profile.name": newName }});
     if (updateInfo.modifiedCount === 0) {
         return Promise.reject("Could not update user successfully");
     }
-    
+
     return await this.get(id);
 }
 
@@ -130,7 +137,7 @@ async function addPostToUser(id, post) {
 //doesn't enforce anything on the post as of now
 
     var col = await users();
-    
+
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$push : {"profile.posts": post }});
     if (updateInfo.modifiedCount === 0) {
         return Promise.reject( "Could not perform post addition successfully");
@@ -147,7 +154,7 @@ async function deletePostFromUser(id,post_id){
 //doesn't enforce anything on the post as of now
 
     var col = await users();
-    
+
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts":  {_id: post_id } } });
     if (updateInfo.modifiedCount === 0) {
         throw new Error ( "Could not perform post deletion successfully");
@@ -180,5 +187,7 @@ module.exports = {
     addPostToUser: addPostToUser,
     deletePostFromUser: deletePostFromUser,
     updatePostById: updatePostById,
+    getByDisplayname: getByDisplayname,
     getByUsername: getByUsername
 }
+

@@ -1,0 +1,9 @@
+{{error}}
+{{title}}
+<ul>
+{{#each people}}
+    <li> <a href="/profile/{{this.username}}"> {{this.displayname}} </a></li>
+{{/each}}
+</ul>
+
+<a href="/search">Make another search.</a>
