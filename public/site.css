@@ -96,5 +96,9 @@ textarea {
 	border: 4px solid #4CAF50;
 	border-radius: 5px;
 	background-color: #cae8cb;
+}
 
+.resultsList {
+	list-style-type: circle;
+	display: block;
 }
