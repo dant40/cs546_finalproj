@@ -6,12 +6,20 @@
         <link rel="stylesheet" type="text/css" href="site.css">
     </head>
     <body>
-        <header id="headerBar">
-            <h1><a href="/">Friend Network</a></h1>
+        <header>
             <nav>
+                <h1><a href="/">Friend Network</a></h1>
+                <div id="searchBar">
+                    <form id="search-form" method="POST" action="/search" >
+                        {{#if error}}
+                            <p class="error">{{error}}</p>
+                        {{/if}}
+                        <input type="text" placeholder="Search Users.." name="search" required pattern="^[\w\d]*$">
+                        <button type="submit" name="submit" value="Search">Submit</button>
+                    </form>
+                </div>
                 <ul>
-                    <li><a href="/profile"><img src="profile.png" height="100%" width="25px" /></a></li>
-                    <li><a href="/search">Search people</a></li>
+                    <li id="profileLink"><a href="/profile">Profile</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>
             </nav>

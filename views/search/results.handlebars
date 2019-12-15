@@ -1,9 +1,11 @@
-{{error}}
-{{title}}
+{{#if error}}
+	<p class="error">{{error}}</p>
+{{/if}}
+<h2>{{title}}</h2>
 <ul>
 {{#each people}}
     <li> <a href="/profile/{{this.username}}"> {{this.displayname}} </a></li>
 {{/each}}
 </ul>
 
-<a href="/search">Make another search.</a>
+<a id="makeNewSearch" href="/search">Make another search.</a>
