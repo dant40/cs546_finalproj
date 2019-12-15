@@ -82,8 +82,6 @@ async function getByUsername(username) {
     if (!username) return Promise.reject('No username provided');
     const col = await users();
     const result = await col.findOne({username: username});
-    console.log("\nUSERNAME\n");
-    console.log(result);
     if (result === null)
         return Promise.reject('No users found');
     return result;
@@ -186,7 +184,6 @@ async function editBio(username, bio) {
     if( typeof(bio) !== 'string')
         return Promise.reject("Invalid input type!");
     let user = await this.getByUsername(username);
-        console.log(user);
     var col = await users();
     const updateInfo = await col.updateOne({ _id: ObjectID(user._id) }, {$set : {"profile.bio": bio }});
     if (updateInfo.modifiedCount === 0) {
