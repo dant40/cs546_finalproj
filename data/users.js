@@ -179,5 +179,6 @@ module.exports = {
     setProfileName: setProfileName,
     addPostToUser: addPostToUser,
     deletePostFromUser: deletePostFromUser,
-    updatePostById: updatePostById
+    updatePostById: updatePostById,
+    getByUsername: getByUsername
 }
