@@ -2,20 +2,30 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="site.css">
 </head>
 <body>
-<form id="login-form" method="post" action="/login">
-    {{#if error}}
-    <span>Error: {{error}}</span>
-    {{/if}}
-    <div>
-        <label>Username</label>
-        <input type="text" name="username" id="username" required>
-        <br/>
-        <label>Password</label>
-        <input type="password" name="password" id="password" required>
+<form id="login-form" method="POST" action="/login">
+    <div class="login">
+        <div class="login-screen">
+            <div class="app-title">
+                <h1>Login</h1>
+            </div>
+            <div class="login-form">
+                {{#if error}}
+                    <p class="error">Error: {{error}}</p>
+                {{/if}}
+                <div class="control-group">
+                    <input id="login-name" type="text" class="login-field" value="" placeholder="username" name="username">
+                    <label class="login-field-icon fui-user" for="login-name"></label></div>
+                <div class="control-group">
+                    <input id="login-pass" type="password" class="login-field" value="" placeholder="password" name="password">
+                    <label class="login-field-icon fui-lock" for="login-pass"></label></div>
+                <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block">
+                <p>Don't have an account? <a href='/register'>Join today!</a></p>
+            </div>  
+        </div>
     </div>
-    <button type="submit">Submit</button>
 </form>
 </body>
 </html>
