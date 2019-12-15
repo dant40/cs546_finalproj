@@ -54,7 +54,7 @@ async function validLogin(username, password) {
     if (!username) return Promise.reject('No username provided');
     if (!password) return Promise.reject('No password provided');
 
-    user = await this.get(username);
+    user = await this.getByUsername(username);
     passwordCorrect = await bcrypt.compare(password, user.hashedPassword);
     return passwordCorrect;
 }
@@ -77,7 +77,7 @@ async function get(id) {
     return temp;
 }
 
-async function get(username) {
+async function getByUsername(username) {
     if (!username) return Promise.reject('No username provided');
 
     const col = await users();
