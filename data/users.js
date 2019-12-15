@@ -79,7 +79,6 @@ async function get(id) {
 
 async function getByUsername(username) {
     if (!username) return Promise.reject('No username provided');
-
     const col = await users();
     const result = await col.findOne({username: username});
     if (result === null)

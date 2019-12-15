@@ -1,4 +1,44 @@
-.headerBar {
-	
+html {
+	background-color:#cae8cb;
+}
+
+body {
+	margin: 0;
+}
+
+#headerBar {
+	background-color: #4CAF50;
+	display: inline-block;
+	margin: 0;
+	padding: 10px 4px;
+	height: 50px;
+	width:100%;
+}
+
+#headerBar * {
+	display: inline;
+}
+
+#headerBar>h1 {
+	margin: auto;
+}
+
+nav {
+	float: right;
+	margin-right: 15px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+li {
+	list-style-type: none;
+	display: inline;
+}
+
+ul {
+	margin: 0;
 }
 

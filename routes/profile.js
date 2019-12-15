@@ -9,13 +9,12 @@ function getPageTitle(username) {
 
 router.get('/profile', async(req, res) => {
   let user = await users.getByUsername(req.session.username);
-  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user});
+  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false});
 });
 
-router.get('/profile/:user', async(req, res) => {
-  console.log()
-  let user = await users.getByUsername((req.params.user));
-  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.params.user), profile: user});
+router.get('/profile/:userName', async(req, res) => {
+  let user = await users.getByUsername((req.params.userName));
+  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.params.userName), profile: user, notYou: true});
 });
 
 module.exports = router;
