@@ -6,26 +6,36 @@ body {
 	margin: 0;
 }
 
-#headerBar {
+nav {
+	position: relative;
 	background-color: #4CAF50;
 	display: inline-block;
-	margin: 0;
+	margin: 0 auto;
 	padding: 10px 4px;
 	height: 50px;
 	width:100%;
+	height: 100%;
+	width: 100%;
 }
 
-#headerBar * {
-	display: inline;
+nav * {
+	display: inline-block;
 }
 
-#headerBar>h1 {
+nav>*{
+	width: 32.5%;
+}
+
+nav a {
+	font-size: 20px;
+}
+
+h1 a{
+	font-size: 30px;
+}
+
+nav>h1 {
 	margin: auto;
-}
-
-nav {
-	float: right;
-	margin-right: 15px;
 }
 
 a {
@@ -35,10 +45,45 @@ a {
 
 li {
 	list-style-type: none;
-	display: inline;
+	display: inline-block;
 }
 
-ul {
-	margin: 0;
+#navUL {
+	margin: 0 auto;
+	text-align: right;
+	margin-right: 15px;
+	padding:0px;
 }
 
+#profileLink {
+	/*border-width: 2px;*/
+	padding-right:5px;
+	border-color: gray;
+	border-right: 2px solid black;
+}
+
+#searchBar {
+	text-align: center;	
+}
+
+#searchBar input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+
+#searchBar button {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+#searchBar button:hover {
+  background: #ccc;
+}
