@@ -23,7 +23,7 @@ async function create(author,content) {
         content: content,
         likes: {
             amount: 0,
-           // likedBy: []
+            likedBy: []
         },
         comments: []
     };
@@ -69,8 +69,8 @@ async function remove(id) {
     return result;
 }
 
-//This doesn't handle keeping a list of the users who've liked this yet 
-async function likePostById(id){
+//Expects a post id and the username of the person liking the post
+async function likePostById(id,username){
     if(id === undefined)
         return Promise.reject("Please enter id")
 
@@ -79,7 +79,8 @@ async function likePostById(id){
 
     var col = await posts();
     
-    const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$inc : {"likes.amount": 1 }});
+    const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
+    {$inc : {"likes.amount": 1 }, $push: {"likes.likedBy": username} });
     if (updateInfo.modifiedCount === 0) {
         return Promise.reject("Could not perform post addition successfully");
     }
@@ -99,8 +100,7 @@ async function commentOnPostById(id,comment){
     if (updateInfo.modifiedCount === 0) {
         return Promise.reject("Could not perform post addition successfully");
     }
-    
-   return await this.get(id); 
+    return await this.get(id); 
 }
 
 
