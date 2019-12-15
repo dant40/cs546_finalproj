@@ -1,0 +1,13 @@
+<div>
+    <form id="post-form" method="POST" action="/makePost">
+    {{#if error}}
+    <p class="error">{{error}}</p>
+    {{/if}}
+    <label for="postbody">What's New:</label>
+    <input type="text" name="postBody" required ></br>
+    {{!-- <label for="postBodyImage">Add a picture?</label>
+    <input type="image" name="postBodyImage"></br> --}}
+    <input type = "hidden" value = {{user}}> </br>
+    <input type="submit" name="submit" value="Make Post">
+</form>
+</div>
