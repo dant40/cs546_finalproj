@@ -1,18 +1,32 @@
+<link rel="stylesheet" type="text/css" href="login.css">
 <form id="registration-form" method="POST" action="/register">
-    {{#if error}}
-    <p class="error">{{error}}</p>
-    {{/if}}
-    <label for="username">username:</label>
-    <input type="text" name="username" required pattern="^[\w\d]*$"></br>
+    <div class="login">
+        <div class="login-screen">
+            <div class="app-title">
+                <h1>Register</h1>
+            </div>
+            <div class="login-form">
+                {{#if error}}
+                    <p class="error">Error: {{error}}</p>
+                {{/if}}
+                <div class="control-group">
+                    <input id="login-name" type="text" class="login-field" value="" placeholder="Username" name="username" required pattern="^[\w\d]*$">
+                    <label class="login-field-icon fui-user" for="login-name"></label></div>
+                <div class="control-group">
+                    <input id="register-name" type="text" class="login-field" value="" placeholder="First Name" name="firstName">
+                    <label class="login-field-icon fui-user" for="register-name"></label></div>
+                <div class="control-group">
+                    <input id="register-mid" type="text" class="login-field" value="" placeholder="Middle Name" name="middleName">
+                    <label class="login-field-icon fui-user" for="register-mid"></label></div>
+                <div class="control-group">
+                    <input id="register-last" type="text" class="login-field" value="" placeholder="Last Name" name="lastName">
+                    <label class="login-field-icon fui-user" for="register-last"></label></div>
+                <div class="control-group">
+                    <input id="login-pass" type="password" class="login-field" value="" placeholder="Password" name="password" required>
+                    <label class="login-field-icon fui-lock" for="login-pass"></label></div>
+                <input type="submit" value="Register" class="btn btn-primary btn-large btn-block">
+            </div>  
+        </div>
+    </div>
 
-    <label for="firstName">first name:</label>
-    <input type="text" name="firstName"></br>
-    <label for="midName">middle name:</label>
-    <input type="text" name="midName"></br>
-    <label for="lastName">last name:</label>
-    <input type="text" name="lastName"></br>
-
-    <label for="password">password:</label>
-    <input type="password" name="password" required></br>
-    <input type="submit" name="submit" value="Register">
 </form>
