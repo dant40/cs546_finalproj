@@ -45,7 +45,8 @@ function emptyUserProfile(id,username,displayname) {
         _id: id,
         username: username,
         name: displayname,
-        posts: []
+        posts: [],
+        friends: [] //list of friends I am adding it here stores usernames
     }
     return prof;
 }
@@ -176,6 +177,52 @@ async function updatePostById(id,newPost){
     return await this.get(id);
 }
 
+//FRIENDS
+//user1 is adding user2 to its list of friends
+async function addFriend(user1, user2){
+  if(user1 === undefined || user2 === undefined){
+    return Promise.reject("user1 or user2 is undefined");
+  }
+  try{
+    getByUsername(user2);
+  }catch (e) {
+    return Promise.reject('No users2 not found; you cannot add a friend that does not exist.');
+  }
+  const col = await users();
+  const updateInfo = await col.updateOne({username: user1},
+    {$set : {"profile.friends": getByUsername(user1).profile.friends.push(user2)}});
+  if (updateInfo.modifiedCount === 0) {
+      return Promise.reject( "Could not perform adding friend operation successfully");
+  }
+  return getByUsername(user1);
+}
+
+//helper function to remove a value from an array
+function arrayRemove(arr, value) {
+   return arr.filter(function(ele){
+       return ele != value;
+   });
+}
+
+//User1 is removing user2 from its list of friends
+async function removeFriend(user1, user2){
+  if(user1 === undefined || user2 === undefined){
+    return Promise.reject("user1 or user2 is undefined");
+  }
+  try{
+    getByUsername(user2);
+  }catch (e) {
+    return Promise.reject('No users2 not found; you cannot remove a friend that does not exist.');
+  }
+  const col = await users();
+  const updateInfo = await col.updateOne({username: user1},
+    {$set : {"profile.friends": arrayRemove(getByUsername(user1).profile.friends, user2)}});
+  if (updateInfo.modifiedCount === 0) {
+      return Promise.reject( "Could not perform removing friend operation successfully");
+  }
+  return getByUsername(user1);
+}
+
 module.exports = {
     create: create,
     validLogin: validLogin,
@@ -187,6 +234,7 @@ module.exports = {
     deletePostFromUser: deletePostFromUser,
     updatePostById: updatePostById,
     getByDisplayname: getByDisplayname,
-    getByUsername: getByUsername
-}
-
+    getByUsername: getByUsername,
+    addFriend: addFriend,
+    removeFriend: removeFriend
+};
