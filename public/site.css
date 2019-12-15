@@ -48,7 +48,7 @@ li {
 	display: inline-block;
 }
 
-ul {
+#navUL {
 	margin: 0 auto;
 	text-align: right;
 	margin-right: 15px;
