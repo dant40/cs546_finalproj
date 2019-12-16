@@ -22,9 +22,17 @@
 <div class="postsContainer">
 	{{#each posts}}
 		<div class="postContainer">
+		 	<div class="modal">
+		        <div class="modal-content">
+		            <span class="close-button">&times;</span>
+		            {{#each this.likes.likedBy}}
+		            	<p>{{this}}</p>
+		            {{/each}}
+		        </div>
+			</div>
 			<textarea class="postTextArea" readonly rows="5" columns="10">{{this.content}}</textarea>
 			<div class="likeCommentArea">
-				<a>Likes: {{this.likes.amount}} </p>
+				<button class="trigger">Likes: {{this.likes.amount}} </button>
 			</div>
 			<div class="buttonContainer">
 				<form method="POST" action="/likePost">
