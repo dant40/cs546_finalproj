@@ -25,9 +25,14 @@ $(document).ready(function() {
     	toggleModal();
     });
 
-    $('#toggle').click( () => {
-    	let x = $('#commentsContainer');
-    	let y = $('#toggle');
+    $('.toggle').click( (e) => {
+        let id = e.currentTarget.id.toString();
+        let mongoid = id.slice(6, id.length);
+        console.log('#commentsContainer' + mongoid);
+        let x = $('#commentsContainer' + mongoid);
+        let y = $("#" + id);
+        console.log(document.getElementById("commentsContainer" + mongoid));
+        console.log(x,y);
     	if (!x.is(':visible')) {
     		x.show();
     		y.html('Hide Comments');

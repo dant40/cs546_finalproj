@@ -48,7 +48,7 @@
 			<div class="likeCommentArea">
 				<button class="trigger">Likes: {{this.likes.amount}} </button>
 			</div>
-			<div id = "commentsContainer" style = "display: none;">
+			<div id="commentsContainer{{this._id}}" class="commentsContainer" style="display: none;">
 				{{#each this.comments}}
 					<span class ="idvComment">
 						<p>{{this.content}}</p>
@@ -75,7 +75,7 @@
 					{{/checkLike}}
 				</form>
 
-			<button style = "margin-top: 5px;" id = "toggle" class = "profileButton">Show Comments</button>
+			<button id="toggle{{this._id}}" class="profileButton toggle">Show Comments</button>
 			{{#if ../notYou}}
 			{{else}}
 				<form method="POST" action="/deletePost">
