@@ -46,7 +46,7 @@ function emptyUserProfile(id,username,displayname) {
         username: username,
         name: displayname,
         posts: [],
-        friends: [] //list of friends I am adding it here stores usernames
+        friends: [], //list of friends I am adding it here stores usernames
         bio: "",
     }
     return prof;
@@ -228,6 +228,7 @@ async function removeFriend(user1, user2){
       return Promise.reject( "Could not perform removing friend operation successfully");
   }
   return getByUsername(user1);
+}
 
 async function editBio(username, bio) {
     if (username === undefined || bio === undefined) {
@@ -261,6 +262,6 @@ module.exports = {
     getByUsername: getByUsername,
     addFriend: addFriend,
     removeFriend: removeFriend,
-    editBio: editBio,
+    editBio: editBio
 }
 
