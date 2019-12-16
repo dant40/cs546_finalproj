@@ -12,7 +12,7 @@ async function main() {
   const user2 = await users.create("testUser2","leonard" ,"pass2")
   const post1 =await posts.create(id,"Hello Everyone");
 
-  //EVERY TIME A POST IS MADE, THIS SHOULD BE DONE
+ //  //EVERY TIME A POST IS MADE, THIS SHOULD BE DONE
   const temp = await users.addPostToUser(id,post1)
 
   const temp2 =await posts.likePostById(post1._id,user2.username)
