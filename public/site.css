@@ -194,3 +194,8 @@ textarea {
 	background-color: #cae8cb;
 	cursor: pointer;
 }
+
+.likesList {
+	list-style-type: circle;
+	display: block;
+}
