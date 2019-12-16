@@ -46,6 +46,7 @@ function emptyUserProfile(id,username,displayname) {
         username: username,
         name: displayname,
         posts: [],
+        friends: [] //list of friends I am adding it here stores usernames
         bio: "",
     }
     return prof;
@@ -87,8 +88,8 @@ async function getByUsername(username) {
     return result;
 }
 
-//function to search for displayname used in post /search, max is the max number of results
-async function getByDisplayname(displayname, max){
+//function to search for displayname used in post /search
+async function getByDisplayname(displayname){
   if (!displayname) return Promise.reject('No displayname provided');
   const col = await users();
   return await col.find({"displayname": new RegExp(displayname, 'i')}).toArray();
@@ -177,6 +178,57 @@ async function updatePostById(id,newPost){
     return await this.get(id);
 }
 
+
+//FRIENDS
+//user1 is adding user2 to its list of friends
+async function addFriend(user1, user2){
+  if(user1 === undefined || user2 === undefined){
+    return Promise.reject("user1 or user2 is undefined");
+  }
+  try{
+    getByUsername(user2);
+  }catch (e) {
+    return Promise.reject('No users2 found; you cannot add a friend that does not exist.');
+  }
+  const col = await users();
+
+  let user1Object = await getByUsername(user1);
+  user1Object.profile.friends.push(user2)
+
+  const updateInfo = await col.updateOne({username: user1},
+    {$set : {"profile.friends": user1Object.profile.friends}});
+  if (updateInfo.modifiedCount === 0) {
+      return Promise.reject( "Could not perform adding friend operation successfully");
+  }
+  return getByUsername(user1);
+}
+
+//helper function to remove a value from an array
+function arrayRemove(arr, value) {
+   return arr.filter(function(ele){
+       return ele != value;
+   });
+}
+
+//User1 is removing user2 from its list of friends
+async function removeFriend(user1, user2){
+  if(user1 === undefined || user2 === undefined){
+    return Promise.reject("user1 or user2 is undefined");
+  }
+  try{
+    getByUsername(user2);
+  }catch (e) {
+    return Promise.reject('No users2 found; you cannot remove a friend that does not exist.');
+  }
+  const col = await users();
+  let user1Object = await getByUsername(user1);
+  const updateInfo = await col.updateOne({username: user1},
+    {$set : {"profile.friends": arrayRemove(user1Object.profile.friends, user2)}});
+  if (updateInfo.modifiedCount === 0) {
+      return Promise.reject( "Could not perform removing friend operation successfully");
+  }
+  return getByUsername(user1);
+
 async function editBio(username, bio) {
     if (username === undefined || bio === undefined) {
         return Promise.reject("Please enter username and bio");
@@ -192,6 +244,7 @@ async function editBio(username, bio) {
 
     return await this.get(user._id);
 
+
 }
 
 module.exports = {
@@ -206,6 +259,8 @@ module.exports = {
     updatePostById: updatePostById,
     getByDisplayname: getByDisplayname,
     getByUsername: getByUsername,
+    addFriend: addFriend,
+    removeFriend: removeFriend,
     editBio: editBio,
 }
 
