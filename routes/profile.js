@@ -45,9 +45,28 @@ router.post('/newPost', async(req, res) => {
 
 router.post('/deletePost', async(req, res) => {
 	let post = await posts.get(req.body.postId);
-	await users.deletePostFromUser(post.author, post._id);
-	await posts.remove(post._id);
+	let deletedPost = await users.deletePostFromUser(post.author, post._id);
+	let removedPost = await posts.remove(post._id);
 	res.redirect('/profile');
+});
+
+router.post('/likePost', async(req, res) => {
+	let post = await posts.get(req.body.postId);
+	let user = await users.get(post.author);
+	let getCurrUser = await users.getByUsername(req.session.username);
+	let alreadyLiked = false;
+	for (let i = 0; i < post.likes.likedBy.length; i++) {
+		if (post.likes.likedBy[i] === getCurrUser.username) {
+			alreadyLiked = true;
+		}
+	}
+	console.log(alreadyLiked);
+	if (alreadyLiked) {
+		let liked = await posts.unlikePostById(post._id, user.username);
+	} else {
+		let liked = await posts.likePostById(post._id, user.username);
+	}
+	res.redirect('back');
 });
 
 module.exports = router;

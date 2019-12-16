@@ -145,3 +145,7 @@ textarea {
 .postsContainer * {
 	margin: 0 auto;
 }
+
+.buttonContainer>*{
+	display: inline-block;
+}
