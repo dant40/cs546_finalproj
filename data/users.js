@@ -244,8 +244,6 @@ async function editBio(username, bio) {
     }
 
     return await this.get(user._id);
-
-
 }
 
 module.exports = {
