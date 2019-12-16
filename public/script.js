@@ -13,14 +13,6 @@ $(document).ready(function() {
 		$("#editBioButton").show();
 	});
 
-	$('.likeButton').click( () => {
-		if ($('.likeButton').value === 'Like Post') {
-			$('.likeButton').attr('value', 'Unlike Post');
-		} else {
-			$('.likeButton').attr('value', 'Like Post');
-		}
-	});
-
     function toggleModal() {
         $('.modal').toggleClass("show-modal");
     }
@@ -33,5 +25,15 @@ $(document).ready(function() {
     	toggleModal();
     });
 
-
+    $('#toggle').click( () => {
+    	let x = $('#commentsContainer');
+    	let y = $('#toggle');
+    	if (!x.is(':visible')) {
+    		x.show();
+    		y.html('Hide Comments');
+    	} else {
+    		x.hide();
+    		y.html('Show Comments');
+    	}
+    });
 });
