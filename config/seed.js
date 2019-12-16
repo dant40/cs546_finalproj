@@ -19,7 +19,12 @@ async function main() {
   const temp3 = await users.updatePostById(id,temp2)
   //Just using a simple text comment here, actual comments passed in
   //should have a username at least
-  const temp4 = await posts.commentOnPostById(post1._id, "This is lame")
+  const comment = {
+      content: "Hello friendo",
+      author: user2.username,
+      timestamp: new Date(),
+  }
+  const temp4 = await posts.commentOnPostById(post1._id, comment)
   const temp5 = await users.updatePostById(id,temp4)
 
   const result1 = await users.get(user1._id)
