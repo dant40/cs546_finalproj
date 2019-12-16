@@ -1,5 +1,11 @@
-{{#if notYou}}
-	<a href="/add/{{displayname}}">Add Friend</a>
-{{/if}}
 <h1>{{title}}</h1>
 <h2>{{profile.displayname}}</h2>
+
+{{#if notYou}}
+	<textarea rows="5" readonly>{{profile.profile.bio}}</textarea>
+{{else}}
+		<form id="bio-form" method="POST" action="/editBio">
+			<textarea id="bioInfo" name="bioInfo" rows="5" columns="10">{{profile.profile.bio}}</textarea>
+			<input type="submit" value="Submit">
+		</form>
+{{/if}}
