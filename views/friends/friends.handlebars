@@ -1,8 +1,17 @@
-{{title}}
+<h2>{{title}}</h2>
+<form id="search-form" method="POST" action="/add" >
+    <input type="text" placeholder="Add Friend" name="addFriend" required pattern="^[\w\d]*$">
+    <button type="submit" name="submit" value="addFriend">Submit</button>
+</form>
 <ul>
-{{#each friendsList}}
-    <li> <a href="/profile/{{this.username}}"> {{this.displayname}} </a></li>
+{{#each friends}}
+<li class="resultsList">
+  <form id="login-form" method="GET" action="/profile">
+    <button class="resultButton" name="userName" type="submit" value="{{this.username}}">{{this.displayname}}</button>
+  </form>
+  <form class="" action="/remove" method="post">
+    <button type="submit" name="userName" value="{{this.username}}">Remove Above (fix this)</button>
+  </form>
+</li>
 {{/each}}
 </ul>
-
-<a href="/profile">Your Profile.</a>
