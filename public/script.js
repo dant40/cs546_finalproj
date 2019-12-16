@@ -20,4 +20,18 @@ $(document).ready(function() {
 			$('.likeButton').attr('value', 'Like Post');
 		}
 	});
+
+    function toggleModal() {
+        $('.modal').toggleClass("show-modal");
+    }
+
+    $('.trigger').click( () => {
+    	toggleModal();
+    });
+
+    $('.close-button').click( () => {
+    	toggleModal();
+    });
+
+
 });
