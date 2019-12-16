@@ -1,9 +1,10 @@
-{{#if error}}
-	<p class="error">{{error}}</p>
-{{/if}}
 <h2>{{title}}</h2>
 <ul>
 {{#each people}}
-    <li class="resultsList"> <a href="/profile/{{this.username}}"><h3> {{this.displayname}} <h3></a></li>
+    <li class="resultsList">
+    	<form id="login-form" method="GET" action="/profile">
+    		<button name="userName" type="submit" value="{{this.username}}">{{this.displayname}}</button>
+    	</form>
+    </li>
 {{/each}}
 </ul>
