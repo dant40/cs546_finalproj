@@ -21,8 +21,18 @@ app.use(session({
     name: 'AuthCookie',
     secret: 'some secret string!',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        expires: 600000
+    }
 }));
+app.use((req, res, next) => {
+    if (req.cookies.AuthCookie && !req.session.username) {
+        res.clearCookie('AuthCookie');
+        console.log('CLEAR COOKIE');
+    }
+    next();
+});
 
 Handlebars.registerHelper('checkLike', function(username, nameList, options) {
     if (nameList.indexOf(username)>= 0){

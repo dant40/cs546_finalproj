@@ -3,8 +3,15 @@ const router = express.Router();
 const data = require('../data');
 const users = data.users;
 
-function sessionAuthenticated(req) {
-    return req.session.username !== undefined;
+async function sessionAuthenticated(req) {
+    const cookieValid = req.cookies.AuthCookie && req.session.username;
+    try {
+        const sessionValid = await users.isSessionValid(req.session.username, req.session.id);
+        return cookieValid && sessionValid;
+    } catch(e) {
+        console.log(e);
+        return false;
+    }
 }
 
 function redirectToDefault(res) {
@@ -13,14 +20,14 @@ function redirectToDefault(res) {
 
 // Register
 router.get('/register', async(req, res) => {
-    if (sessionAuthenticated(req)) {
+    if (await sessionAuthenticated(req)) {
         redirectToDefault(res);
     } else {
         res.render('auth/register', {});
     }
 });
 router.post('/register', async(req, res) => {
-    if (sessionAuthenticated(req)) {
+    if (await sessionAuthenticated(req)) {
         res.status(403);
     } else {
         const names = [];
@@ -32,7 +39,7 @@ router.post('/register', async(req, res) => {
         const username = req.body.username;
         const password = req.body.password;
         // TODO enforce username is unique
-        const user = await users.create(username, fullName, password)
+        const user = await users.create(username, fullName, password);
 
         // Redirects the post request including the form content, so the login request should succeed.
         res.redirect('/login');
@@ -41,23 +48,22 @@ router.post('/register', async(req, res) => {
 
 // Login
 router.get('/login', async(req, res) => {
-    if (sessionAuthenticated(req)) {
+    if (await sessionAuthenticated(req)) {
         redirectToDefault(res);
     } else {
         res.render('auth/login', {});
     }
 });
 router.post('/login', async(req, res) => {
-    if (sessionAuthenticated(req)) {
+    if (await sessionAuthenticated(req)) {
         res.status(403);
     } else {
         const username = req.body.username;
         const password = req.body.password;
+        if (password == null || password == undefined) password = '';
 
         try {
-            valid = await users.validLogin(username, password);
-            if (!valid) throw 'Incorrect password';
-
+            await users.newSession(username, password, req.session.id)
             req.session.username = username;
             redirectToDefault(res);
         } catch (e) {
@@ -70,7 +76,7 @@ router.post('/login', async(req, res) => {
 
 // Logout
 router.get('/logout', async(req, res) => {
-    if (sessionAuthenticated(req)) {
+    if (await sessionAuthenticated(req)) {
         await req.session.destroy();
         res.render('auth/login', {
             error: 'You have been logged out'
@@ -84,7 +90,8 @@ router.get('/logout', async(req, res) => {
 
 // Authentication middleware
 router.all('*', async(req, res, next) => {
-    if (!sessionAuthenticated(req)) {
+    const auth = await sessionAuthenticated(req);
+    if (!auth) {
         res.status(403).render('auth/login', {
             error: 'You must log in to view private pages'
         });
