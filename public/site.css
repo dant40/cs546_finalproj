@@ -118,6 +118,11 @@ textarea {
   cursor: pointer;
 }
 
+.friendButton {
+	margin-bottom: 8px;
+	padding: 10px 21.36px;
+}
+
 .resultButton {
 	background-color: #4CAF50;
 	border: none;
