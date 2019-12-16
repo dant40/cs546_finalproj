@@ -8,20 +8,20 @@ function getPageTitle(username) {
 }
 
 router.get('/profile', async(req, res) => {
-  let user = await users.getByUsername(req.session.username);
-  if (user.profile.bio == "") {
-  	user.profile.bio = "We see you have not entered a bio, would you like to enter one?";
-  }
-  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false});
-});
+	if (!req.query || !req.query.userName || req.query.userName === "" || req.query.userName === req.session.username) {
+		let user = await users.getByUsername(req.session.username);
+  		if (user.profile.bio == "") {
+  			user.profile.bio = "We see you have not entered a bio, would you like to enter one?";
+  		}
+  		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false});
+	} else {
+		let user = await users.getByUsername(req.query.userName);
+		if (user.profile.bio == "") {
+			user.profile.bio = "This user has not inputted a bio about themselves";
+		}
+		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.query.userName), profile: user, notYou: true});
+	}
 
-
-router.get('/profile/:userName', async(req, res) => {
-  let user = await users.getByUsername(req.params.userName);
-  if (user.profile.bio == "") {
-  	user.profile.bio = "This user has not inputted a bio about themselves";
-  }
-  res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.params.userName), profile: user, notYou: true});
 });
 
 router.post('/editBio', async(req, res) => {
