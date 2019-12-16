@@ -3,7 +3,7 @@
 {{#each people}}
     <li class="resultsList">
     	<form id="login-form" method="GET" action="/profile">
-    		<button name="userName" type="submit" value="{{this.username}}">{{this.displayname}}</button>
+    		<button class="resultButton" name="userName" type="submit" value="{{this.username}}">{{this.displayname}}</button>
     	</form>
     </li>
 {{/each}}

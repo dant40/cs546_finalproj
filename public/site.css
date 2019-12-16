@@ -110,9 +110,20 @@ textarea {
 .profileButton {
   background-color: #4CAF50;
   border: none;
-  color: white;
+  color: black;
   padding: 15px 32px;
   text-align: center;
   display: inline-block;
   font-size: 16px;
+}
+
+.resultButton {
+	background-color: #4CAF50;
+	border: none;
+	color: black;
+	padding: 10px 21.36px;
+	text-align: center;
+  	display: inline-block;
+  	font-size: 13px;
+  	margin-bottom: 12px;
 }
