@@ -1,8 +1,4 @@
 <h2>{{title}}</h2>
-<form id="search-form" method="POST" action="/add" >
-    <input type="text" placeholder="Add Friend" name="addFriend" required pattern="^[\w\d]*$">
-    <button type="submit" name="submit" value="addFriend">Submit</button>
-</form>
 <ul>
 {{#each friends}}
 <li class="resultsList">

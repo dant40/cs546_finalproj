@@ -15,11 +15,6 @@
 	<textarea rows="5" readonly>{{profile.profile.bio}}</textarea>
 {{else}}
 
-		<form id="search-form" method="POST" action="/add" >
-				<input type="text" placeholder="Add Friend" name="addFriend" required pattern="^[\w\d]*$">
-				<button type="submit" name="submit" value="addFriend">Submit</button>
-		</form>
-
 		<form id="bio-form" method="POST" action="/editBio">
 			<textarea id="bioInfo" name="bioInfo" rows="5" columns="10" readonly>{{profile.profile.bio}}</textarea>
 			<br />
