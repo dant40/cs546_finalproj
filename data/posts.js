@@ -3,7 +3,6 @@ const posts = mongoCollections.posts;
 const ObjectID = require('mongodb').ObjectID;
 const users = require("./users");
 
-
 //Contains following:
 // create post, delete post, get all posts, get one post, like post by id,
 //comment on post by id
@@ -105,9 +104,8 @@ async function unlikePostById(id,username){
     //     throw new Error ("Invalid input type!")
 
     var col = await posts();
-    
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
-    {$dec : {"likes.amount": 1 }, $pull: {"likes.likedBy": { $in: [username]}} });
+    {$inc : {"likes.amount": -1 }, $pullAll: {"likes.likedBy": [username]} });
     if (updateInfo.modifiedCount === 0) {
         return Promise.reject("Could not perform post addition successfully");
     }

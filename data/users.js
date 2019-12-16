@@ -156,7 +156,7 @@ async function deletePostFromUser(id,post_id){
 
     var col = await users();
     console.log(id, post_id);
-    const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts":  {_id: post_id } } });
+    const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts":  post_id } });
     if (updateInfo.modifiedCount === 0) {
         throw new Error ( "Could not perform post deletion successfully");
     }
@@ -244,8 +244,6 @@ async function editBio(username, bio) {
     }
 
     return await this.get(user._id);
-
-
 }
 
 module.exports = {
