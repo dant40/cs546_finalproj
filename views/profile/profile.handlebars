@@ -26,7 +26,19 @@
 			<form method="POST" action="/likePost">
 				<input name="{{this._id}}" type="hidden"/>
 				<button type="submit" class="profileButton">Like Post</button>
-			</form>
+			</form></br>
+
+			<div class = "commentsContainer">
+				{{#each this.comments}}
+					<p>{{this}}</p></br>
+				{{/each}}
+			</div>
+			<form method = "POST" action= "/commentOnPost">
+				<input name="postId" value="{{this._id}}" type="hidden"/>
+				<label class="" for="Comment"></label>
+				<input class="" type="text" name="comment" value="" placeholder="Type your comment here">
+				<button type="submit" class="profileButton">Comment</button>
+			</form></br>
 			{{#if notYou}}
 			{{else}}
 				<form method="POST" action="/deletePost">

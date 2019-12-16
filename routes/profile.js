@@ -47,4 +47,11 @@ router.post('/deletePost', async(req, res) => {
 	res.redirect('/profile');
 });
 
+router.post('/commentOnPost', async(req,res) => {
+	let post = await posts.get(req.body.postId)
+	const newPost = await posts.commentOnPostById(post._id,req.body.comment)
+	await users.updatePostById(post.author,newPost)
+	res.redirect('/profile')
+})
+
 module.exports = router;
