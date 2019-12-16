@@ -25,7 +25,8 @@ router.get('/profile', async(req, res) => {
 		if (user.profile.bio == "") {
 			user.profile.bio = "This user has not inputted a bio about themselves";
 		}
-		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.query.userName), profile: user, notYou: true, posts: postList, username: req.session.username});
+    let isFriend = await users.isFriend(req.session.username, req.query.userName);
+		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.query.userName), profile: user, notYou: true, posts: postList, username: req.session.username, isFriend: isFriend});
 	}
 
 });

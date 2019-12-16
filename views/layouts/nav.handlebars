@@ -13,11 +13,12 @@
                 <h1><a href="/">Friend Network</a></h1>
                 <div id="searchBar">
                     <form id="search-form" method="POST" action="/search" >
-                        <input type="text" placeholder="Search Users.." name="search" required pattern="^[\w\d]*$">
+                        <input type="text" placeholder="Search Users.." name="search" required pattern="^[\w\d\s]*$">
                         <button type="submit" name="submit" value="Search">Submit</button>
                     </form>
                 </div>
                 <ul id="navUL">
+                    <li id="profileLink"> <a href="/friends">Friends</a></li>
                     <li id="profileLink"><a href="/profile">Profile</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>

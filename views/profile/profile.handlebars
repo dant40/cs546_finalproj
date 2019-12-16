@@ -1,8 +1,25 @@
 <h1>{{title}}</h1>
 <h2>{{profile.displayname}}</h2>
 {{#if notYou}}
+	{{#if isFriend}}
+		<form class="add" action="/remove" method="post">
+			<button type="submit" name="userName" value="{{profile.username}}">Remove</button>
+		</form>
+	{{else}}
+		<form class="add" action="/add" method="post">
+			<button type="submit" name="userName" value="{{profile.username}}">Add</button>
+		</form>
+	{{/if}}
+
+
 	<textarea rows="5" readonly>{{profile.profile.bio}}</textarea>
 {{else}}
+
+		<form id="search-form" method="POST" action="/add" >
+				<input type="text" placeholder="Add Friend" name="addFriend" required pattern="^[\w\d]*$">
+				<button type="submit" name="submit" value="addFriend">Submit</button>
+		</form>
+
 		<form id="bio-form" method="POST" action="/editBio">
 			<textarea id="bioInfo" name="bioInfo" rows="5" columns="10" readonly>{{profile.profile.bio}}</textarea>
 			<br />
@@ -39,9 +56,9 @@
 			<div id = "commentsContainer" style = "display: none;">
 				{{#each this.comments}}
 					<span class ="idvComment">
-						<p>{{this.content}}</p> 
-						<p class = "subtext"> made by: {{this.author}}</p> 
-						<p class = "subtext"> at: {{this.timestamp}}</p> 
+						<p>{{this.content}}</p>
+						<p class = "subtext"> made by: {{this.author}}</p>
+						<p class = "subtext"> at: {{this.timestamp}}</p>
 					</span>
 					</br>
 				{{/each}}
@@ -62,8 +79,8 @@
 					<button type="submit" class="profileButton likeButton">Like Post</button>
 					{{/checkLike}}
 				</form>
-		    
-			<button style = "margin-top: 5px;" id = "toggle" class = "profileButton">Show Comments</button>			
+
+			<button style = "margin-top: 5px;" id = "toggle" class = "profileButton">Show Comments</button>
 			{{#if ../notYou}}
 			{{else}}
 				<form method="POST" action="/deletePost">

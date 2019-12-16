@@ -219,13 +219,18 @@ async function addFriend(user1, user2){
     return Promise.reject("user1 or user2 is undefined");
   }
   try{
-    getByUsername(user2);
+    if(!getByUsername(user2)){
+      return Promise.reject('No user2 found; you cannot add a friend that does not exist.');
+    }
   }catch (e) {
-    return Promise.reject('No users2 found; you cannot add a friend that does not exist.');
+    return Promise.reject('No user2 found; you cannot add a friend that does not exist.');
   }
   const col = await users();
 
   let user1Object = await getByUsername(user1);
+  if(user1Object.profile.friends.includes(user2)){
+    return Promise.reject(user1 + "is already friends with " + user2);
+  }
   user1Object.profile.friends.push(user2)
 
   const updateInfo = await col.updateOne({username: user1},
@@ -241,6 +246,12 @@ function arrayRemove(arr, value) {
    return arr.filter(function(ele){
        return ele != value;
    });
+}
+
+//checks if user2 is on user1's list of friends
+async function isFriend(user1, user2){
+  let user1Object = await getByUsername(user1);
+  return user1Object.profile.friends.includes(user2);
 }
 
 //User1 is removing user2 from its list of friends
@@ -296,6 +307,6 @@ module.exports = {
     getByUsername: getByUsername,
     addFriend: addFriend,
     removeFriend: removeFriend,
-    editBio: editBio
+    editBio: editBio,
+    isFriend: isFriend
 }
-
