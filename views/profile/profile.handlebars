@@ -33,6 +33,7 @@
 					<button type="submit" class="profileButton likeButton">Like Post</button>
 				</form>
 				{{#if notYou}}
+				<p>{{notYou}}</p>
 				{{else}}
 					<form method="POST" action="/deletePost">
 						<input name="postId" value="{{this._id}}" type="hidden"/>
