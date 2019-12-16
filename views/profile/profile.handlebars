@@ -33,9 +33,9 @@
 <div class="postsContainer">
 	{{#each posts}}
 		<div class="postContainer">
-		 	<div class="modal">
+		 	<div class="modal" id="modal{{this._id}}">
 		        <div class="modal-content">
-					<span class="close-button">&times;</span>
+					<span class="close-button" id="close{{this._id}}">&times;</span>
 		        	<h2>Users Who Have Liked This Post</h2>
 		            <ol>
 			            {{#each this.likes.likedBy}}
@@ -46,7 +46,7 @@
 			</div>
 			<textarea class="postTextArea" readonly rows="5" columns="10">{{this.content}}</textarea>
 			<div class="likeCommentArea">
-				<button class="trigger">Likes: {{this.likes.amount}} </button>
+				<button class="trigger" id="trigger{{this._id}}">Likes: {{this.likes.amount}} </button>
 			</div>
 			<div id="commentsContainer{{this._id}}" class="commentsContainer" style="display: none;">
 				{{#each this.comments}}
