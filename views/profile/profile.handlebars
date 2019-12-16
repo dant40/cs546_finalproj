@@ -32,9 +32,9 @@
 					<!-- TODO togggle like/unlike -->
 					<button type="submit" class="profileButton likeButton">Like Post</button>
 				</form>
-			<div class = "commentsContainer">
+			</br><div class = "commentsContainer">
 				{{#each this.comments}}
-					<p>{{this}}</p></br>
+					<p>{{this.content}} --- {{this.author}}</p> </br>
 				{{/each}}
 			</div>
 			<form method = "POST" action= "/commentOnPost">

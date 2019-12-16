@@ -113,7 +113,7 @@ async function unlikePostById(id,username){
 }
 
 //Does not enforce comment format
-//Expected to have: _id, date,author(user_id), content 
+//Expected to have:author(user_id), content 
 //Liking comments NYI
 async function commentOnPostById(id,comment){
     if(id === undefined || comment === undefined)

@@ -52,9 +52,14 @@ router.post('/deletePost', async(req, res) => {
 
 router.post('/commentOnPost', async(req,res) => {
 	let post = await posts.get(req.body.postId)
-	const newPost = await posts.commentOnPostById(post._id,req.body.comment)
+	console.log(req.session.username)
+	const comment = {
+		content: req.body.comment,
+		author: req.session.username
+	}
+	const newPost = await posts.commentOnPostById(post._id,comment)
 	await users.updatePostById(post.author,newPost)
-	res.redirect('/profile')
+	res.redirect('back');
 })
 router.post('/likePost', async(req, res) => {
 	let post = await posts.get(req.body.postId);

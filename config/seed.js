@@ -5,7 +5,7 @@ const posts = require("../data/posts");
 
 async function main() {
   const db = await dbConnection();
-  //await db.dropDatabase();
+  await db.dropDatabase();
 
  //  const user1 = await users.create("testUser1","tim" ,"pass");
  //  const id = user1._id
