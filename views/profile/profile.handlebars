@@ -42,13 +42,18 @@
 
 			<div id = "commentsContainer" style = "display: none;">
 				{{#each this.comments}}
-					<p>{{this.content}} --- {{this.author}}</p> </br>
+					<span class ="idvComment">
+						<p>{{this.content}}</p> 
+						<p class = "subtext"> made by: {{this.author}}</p> 
+						<p class = "subtext"> at: {{this.timestamp}}</p> 
+					</span>
+					</br>
 				{{/each}}
 			</br>
 			<form method = "POST" action= "/commentOnPost">
 				<input name="postId" value="{{this._id}}" type="hidden"/>
-				<label class="" for="Comment"></label>
-				<input class="" type="text" name="comment" value="" placeholder="Type your comment here">
+				<label for="Comment"></label>
+				<input class="commentBox" type="text" name="comment" value="" placeholder="Type your comment here">
 				<button type="submit" class="profileButton">Comment</button>
 			</form>
 			</div></br>

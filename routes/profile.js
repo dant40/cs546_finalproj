@@ -56,7 +56,8 @@ router.post('/commentOnPost', async(req,res) => {
 	console.log(req.session.username)
 	const comment = {
 		content: req.body.comment,
-		author: req.session.username
+		author: req.session.username,
+		timestamp: new Date(),
 	}
 	const newPost = await posts.commentOnPostById(post._id,comment)
 	await users.updatePostById(post.author,newPost)
