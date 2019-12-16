@@ -155,7 +155,7 @@ async function deletePostFromUser(id,post_id){
 //doesn't enforce anything on the post as of now
 
     var col = await users();
-
+    console.log(id, post_id);
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, {$pull : {"profile.posts":  {_id: post_id } } });
     if (updateInfo.modifiedCount === 0) {
         throw new Error ( "Could not perform post deletion successfully");
