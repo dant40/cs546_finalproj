@@ -129,3 +129,19 @@ textarea {
   	margin-bottom: 12px;
   	cursor: pointer;
 }
+
+.postTextArea {
+	width: 800px;
+	height: 100px;
+}
+
+.postsContainer {
+	width: 100%;
+	margin-top: 30px;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.postsContainer * {
+	margin: 0 auto;
+}

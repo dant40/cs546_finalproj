@@ -40,6 +40,15 @@ async function getAll() {
     return cur.toArray();
 }
 
+async function getAllPostsByPosterId(posterId) {
+    if (!posterId) throw 'You must provide a posterId';
+    if (typeof posterId === 'string') {
+      posterId = ObjectId(posterId);
+    }
+    let loadPosts = await posts();
+    return loadPosts.find({author: posterId}).toArray();
+  }
+
 async function get(id) {
     if(id === undefined)
         return Promise.reject("Please enter an id");
@@ -110,5 +119,6 @@ module.exports = {
     getAll: getAll,
     get: get,
     likePostById: likePostById,
-    commentOnPostById: commentOnPostById
+    commentOnPostById: commentOnPostById,
+    getAllPostsByPosterId: getAllPostsByPosterId,
 }
