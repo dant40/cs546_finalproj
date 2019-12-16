@@ -9,6 +9,7 @@ function getPageTitle(username) {
 }
 
 router.get('/profile', async(req, res) => {
+
 	if (!req.query || !req.query.userName || req.query.userName === "" || req.query.userName === req.session.username) {
 		let user = await users.getByUsername(req.session.username);
 		let postList = await posts.getAllPostsByPosterId(user._id);
@@ -16,7 +17,7 @@ router.get('/profile', async(req, res) => {
   		if (user.profile.bio == "") {
   			user.profile.bio = "We see you have not entered a bio, would you like to enter one?";
   		}
-  		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false, posts: postList});
+  		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false, posts: postList, username: req.session.username});
 	} else {
 		let user = await users.getByUsername(req.query.userName);
 		let postList = await posts.getAllPostsByPosterId(user._id);
@@ -24,7 +25,7 @@ router.get('/profile', async(req, res) => {
 		if (user.profile.bio == "") {
 			user.profile.bio = "This user has not inputted a bio about themselves";
 		}
-		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.query.userName), profile: user, notYou: true, posts: postList});
+		res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.query.userName), profile: user, notYou: true, posts: postList, username: req.session.username});
 	}
 
 });
@@ -50,6 +51,18 @@ router.post('/deletePost', async(req, res) => {
 	res.redirect('/profile');
 });
 
+router.post('/commentOnPost', async(req,res) => {
+	let post = await posts.get(req.body.postId)
+	console.log(req.session.username)
+	const comment = {
+		content: req.body.comment,
+		author: req.session.username,
+		timestamp: new Date(),
+	}
+	const newPost = await posts.commentOnPostById(post._id,comment)
+	await users.updatePostById(post.author,newPost)
+	res.redirect('back');
+})
 router.post('/likePost', async(req, res) => {
 	let post = await posts.get(req.body.postId);
 	let getCurrUser = await users.getByUsername(req.session.username);

@@ -1,5 +1,6 @@
 const session = require('express-session')
 const express = require("express");
+const Handlebars = require("handlebars")
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const app = express();
@@ -22,6 +23,13 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+Handlebars.registerHelper('checkLike', function(username, nameList, options) {
+    if (nameList.indexOf(username)>= 0){
+        return options.fn(this);
+    }
+    return options.inverse(this);
+})
 
 configRoutes(app);
 app.listen(3000, function() {

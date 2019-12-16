@@ -1,6 +1,5 @@
 <h1>{{title}}</h1>
 <h2>{{profile.displayname}}</h2>
-
 {{#if notYou}}
 	<textarea rows="5" readonly>{{profile.profile.bio}}</textarea>
 {{else}}
@@ -41,12 +40,38 @@
 				<form method="POST" action="/likePost">
 					<input name="postId" value="{{this._id}}" type="hidden"/>
 					<!-- TODO togggle like/unlike -->
+					{{#checkLike ../username this.likes.likedBy}}
+					<button type="submit" class="profileButton likeButton">Unlike Post</button>
+					{{else}}
 					<button type="submit" class="profileButton likeButton">Like Post</button>
+					{{/checkLike}}
 				</form>
-				{{#if notYou}}
-				<p>{{notYou}}</p>
+
+			</br>
+		     
+			<button style = "margin-top: 5px;" onclick=" var x = document.getElementById('commentsContainer'); var y = document.getElementById('toggle'); if (x.style.display === 'none') { x.style.display = 'block'; y.innerText = 'Hide Comments' } else { x.style.display = 'none'; y.innerText = 'Show Comments'}" id = "toggle" class = "profileButton">Show Comments</button> </br>
+
+			<div id = "commentsContainer" style = "display: none;">
+				{{#each this.comments}}
+					<span class ="idvComment">
+						<p>{{this.content}}</p> 
+						<p class = "subtext"> made by: {{this.author}}</p> 
+						<p class = "subtext"> at: {{this.timestamp}}</p> 
+					</span>
+					</br>
+				{{/each}}
+			</br>
+			<form method = "POST" action= "/commentOnPost">
+				<input name="postId" value="{{this._id}}" type="hidden"/>
+				<label for="Comment"></label>
+				<input class="commentBox" type="text" name="comment" value="" placeholder="Type your comment here">
+				<button type="submit" class="profileButton">Comment</button>
+			</form>
+			</div></br>
+				
+				{{#if ../notYou}}
 				{{else}}
-					<form method="POST" action="/deletePost">
+					<form method="POST" action="/deletePost"></form>
 						<input name="postId" value="{{this._id}}" type="hidden"/>
 						<button type="submit" class="profileButton">Delete Post</button>
 					</form>

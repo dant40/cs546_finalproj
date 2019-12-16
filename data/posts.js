@@ -90,7 +90,7 @@ async function likePostById(id,username){
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
     {$inc : {"likes.amount": 1 }, $push: {"likes.likedBy": username} });
     if (updateInfo.modifiedCount === 0) {
-        return Promise.reject("Could not perform post addition successfully");
+        return Promise.reject("Could not perform post operation successfully");
     }
     return await this.get(id);
 }
@@ -107,13 +107,13 @@ async function unlikePostById(id,username){
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
     {$inc : {"likes.amount": -1 }, $pullAll: {"likes.likedBy": [username]} });
     if (updateInfo.modifiedCount === 0) {
-        return Promise.reject("Could not perform post addition successfully");
+        return Promise.reject("Could not perform post operation successfully");
     }
     return await this.get(id);
 }
 
 //Does not enforce comment format
-//Expected to have: _id, date,author(user_id), content 
+//Expected to have:author(user_id), content 
 //Liking comments NYI
 async function commentOnPostById(id,comment){
     if(id === undefined || comment === undefined)
