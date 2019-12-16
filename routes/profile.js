@@ -12,7 +12,7 @@ router.get('/profile', async(req, res) => {
   res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.session.username), profile: user, notYou: false});
 });
 
-router.get('/profile/:userName', async(req, res) => {
+router.get('/profile/:userName', async(req, res) => { 
   let user = await users.getByUsername((req.params.userName));
   res.render('profile/profile', {layout: 'nav', title: getPageTitle(req.params.userName), profile: user, notYou: true});
 });

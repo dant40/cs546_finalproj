@@ -87,8 +87,8 @@ async function getByUsername(username) {
     return result;
 }
 
-//function to search for displayname used in post /search, max is the max number of results
-async function getByDisplayname(displayname, max){
+//function to search for displayname used in post /search
+async function getByDisplayname(displayname){
   if (!displayname) return Promise.reject('No displayname provided');
   const col = await users();
   return await col.find({"displayname": new RegExp(displayname, 'i')}).toArray();
@@ -186,11 +186,15 @@ async function addFriend(user1, user2){
   try{
     getByUsername(user2);
   }catch (e) {
-    return Promise.reject('No users2 not found; you cannot add a friend that does not exist.');
+    return Promise.reject('No users2 found; you cannot add a friend that does not exist.');
   }
   const col = await users();
+
+  let user1Object = await getByUsername(user1);
+  user1Object.profile.friends.push(user2)
+
   const updateInfo = await col.updateOne({username: user1},
-    {$set : {"profile.friends": getByUsername(user1).profile.friends.push(user2)}});
+    {$set : {"profile.friends": user1Object.profile.friends}});
   if (updateInfo.modifiedCount === 0) {
       return Promise.reject( "Could not perform adding friend operation successfully");
   }
@@ -212,11 +216,12 @@ async function removeFriend(user1, user2){
   try{
     getByUsername(user2);
   }catch (e) {
-    return Promise.reject('No users2 not found; you cannot remove a friend that does not exist.');
+    return Promise.reject('No users2 found; you cannot remove a friend that does not exist.');
   }
   const col = await users();
+  let user1Object = await getByUsername(user1);
   const updateInfo = await col.updateOne({username: user1},
-    {$set : {"profile.friends": arrayRemove(getByUsername(user1).profile.friends, user2)}});
+    {$set : {"profile.friends": arrayRemove(user1Object.profile.friends, user2)}});
   if (updateInfo.modifiedCount === 0) {
       return Promise.reject( "Could not perform removing friend operation successfully");
   }
