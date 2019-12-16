@@ -13,16 +13,28 @@ $(document).ready(function() {
 		$("#editBioButton").show();
 	});
 
-    function toggleModal() {
-        $('.modal').toggleClass("show-modal");
-    }
-
-    $('.trigger').click( () => {
-    	toggleModal();
+    $('.trigger').click( (e) => {
+        let id = e.currentTarget.id.toString();
+        let mongoid = id.slice(7, id.length);
+        let modalId = "modal" + mongoid;
+        let x = $("#" + modalId);
+        if (!x.is(':visible')) {
+            x.show();
+        } else {
+            x.hide();
+        }
     });
 
-    $('.close-button').click( () => {
-    	toggleModal();
+    $('.close-button').click( (e) => {
+        let id = e.currentTarget.id.toString();
+        let mongoid = id.slice(5, id.length);
+        let modalId = "modal" + mongoid;
+        let x = $("#" + modalId);
+        if (!x.is(':visible')) {
+            x.show();
+        } else {
+            x.hide();
+        }
     });
 
     $('.toggle').click( (e) => {
