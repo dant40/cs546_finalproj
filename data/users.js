@@ -60,6 +60,39 @@ async function validLogin(username, password) {
     passwordCorrect = await bcrypt.compare(password, user.hashedPassword);
     return passwordCorrect;
 }
+async function newSession(username, password, sessionId) {
+    if (!username) return Promise.reject('No username provided');
+    if (!password) return Promise.reject('No password provided');
+    if (!sessionId) return Promise.reject('No sessionId provided');
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: username});
+    if (user === null) return Promise.reject('Invalid username');
+    const passwordCorrect = await bcrypt.compare(password, user.hashedPassword);
+    if (!passwordCorrect) return Promise.reject('Incorrect password');
+
+    const updateInfo = await userCollection.updateOne({_id: user._id}, {$set: {sessionid: sessionId}});
+    if (updateInfo.modifiedCount == 0) return Promise.reject("Unable to update the user's session");
+    
+    const u = await this.getByUsername(username);
+}
+async function isSessionValid(username, sessionId) {
+    if (!username) return Promise.reject('No username provided');
+    if (!sessionId) return Promise.reject('No sessionId provided');
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: username});
+    if (user == null) return Promise.reject('No user found');
+    return user.sessionid == sessionId;
+}
+async function endSession(username, sessionId) {
+    if (!username) return Promise.reject('No username provided');
+    if (!sessionId) return Promise.reject('No sessionId provided');
+
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne({username: username, sessionid: sessionId}, {$set: {sessionid: ''}});
+    if (updateInfo.modifiedCount == 0) return Promise.reject("Unable to update the user's session");
+}
 
 async function getAll() {
     var col = await users();
@@ -249,6 +282,9 @@ async function editBio(username, bio) {
 module.exports = {
     create: create,
     validLogin: validLogin,
+    newSession: newSession,
+    isSessionValid: isSessionValid,
+    endSession: endSession,
     getAll: getAll,
     get: get,
     remove: remove,
