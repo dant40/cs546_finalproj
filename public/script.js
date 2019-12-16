@@ -12,4 +12,12 @@ $(document).ready(function() {
 		$("#submitBioButton").hide();
 		$("#editBioButton").show();
 	});
+
+	$('.likeButton').click( () => {
+		if ($('.likeButton').value === 'Like Post') {
+			$('.likeButton').attr('value', 'Unlike Post');
+		} else {
+			$('.likeButton').attr('value', 'Like Post');
+		}
+	});
 });

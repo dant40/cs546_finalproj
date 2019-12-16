@@ -23,17 +23,23 @@
 	{{#each posts}}
 		<div class="postContainer">
 			<textarea class="postTextArea" readonly rows="5" columns="10">{{this.content}}</textarea>
-			<form method="POST" action="/likePost">
-				<input name="{{this._id}}" type="hidden"/>
-				<button type="submit" class="profileButton">Like Post</button>
-			</form>
-			{{#if notYou}}
-			{{else}}
-				<form method="POST" action="/deletePost">
+			<div class="likeCommentArea">
+				<a>Likes: {{this.likes.amount}} </p>
+			</div>
+			<div class="buttonContainer">
+				<form method="POST" action="/likePost">
 					<input name="postId" value="{{this._id}}" type="hidden"/>
-					<button type="submit" class="profileButton">Delete Post</button>
+					<!-- TODO togggle like/unlike -->
+					<button type="submit" class="profileButton likeButton">Like Post</button>
 				</form>
-			{{/if}}
+				{{#if notYou}}
+				{{else}}
+					<form method="POST" action="/deletePost">
+						<input name="postId" value="{{this._id}}" type="hidden"/>
+						<button type="submit" class="profileButton">Delete Post</button>
+					</form>
+				{{/if}}
+			</div>
 		</div>
 	{{/each}}
 </div>
