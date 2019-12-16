@@ -3,7 +3,6 @@ const posts = mongoCollections.posts;
 const ObjectID = require('mongodb').ObjectID;
 const users = require("./users");
 
-
 //Contains following:
 // create post, delete post, get all posts, get one post, like post by id,
 //comment on post by id
@@ -39,6 +38,15 @@ async function getAll() {
     var cur = await col.find();
     return cur.toArray();
 }
+
+async function getAllPostsByPosterId(posterId) {
+    if (!posterId) throw 'You must provide a posterId';
+    if (typeof posterId === 'string') {
+      posterId = ObjectId(posterId);
+    }
+    let loadPosts = await posts();
+    return loadPosts.find({author: posterId}).toArray();
+  }
 
 async function get(id) {
     if(id === undefined)
@@ -82,13 +90,30 @@ async function likePostById(id,username){
     const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
     {$inc : {"likes.amount": 1 }, $push: {"likes.likedBy": username} });
     if (updateInfo.modifiedCount === 0) {
-        return Promise.reject("Could not perform post addition successfully");
+        return Promise.reject("Could not perform post operation successfully");
+    }
+    return await this.get(id);
+}
+
+//Expects a post id and the username of the person liking the post
+async function unlikePostById(id,username){
+    if(id === undefined)
+        return Promise.reject("Please enter id")
+
+    // if(typeof(id)!== 'string')
+    //     throw new Error ("Invalid input type!")
+
+    var col = await posts();
+    const updateInfo = await col.updateOne({ _id: ObjectID(id) }, 
+    {$inc : {"likes.amount": -1 }, $pullAll: {"likes.likedBy": [username]} });
+    if (updateInfo.modifiedCount === 0) {
+        return Promise.reject("Could not perform post operation successfully");
     }
     return await this.get(id);
 }
 
 //Does not enforce comment format
-//Expected to have: _id, date,author(user_id), content 
+//Expected to have:author(user_id), content 
 //Liking comments NYI
 async function commentOnPostById(id,comment){
     if(id === undefined || comment === undefined)
@@ -110,5 +135,7 @@ module.exports = {
     getAll: getAll,
     get: get,
     likePostById: likePostById,
-    commentOnPostById: commentOnPostById
+    unlikePostById: unlikePostById,
+    commentOnPostById: commentOnPostById,
+    getAllPostsByPosterId: getAllPostsByPosterId,
 }

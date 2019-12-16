@@ -16,7 +16,7 @@ function getPageTitle(username) {
 
 
 router.get('/friends', async (req, res) => {
-  console.log("made it here");
+  //console.log("made it here");
   let friendsList = await users.getByUsername(req.session.username).friends;
   res.render('friends/friends', {layout: 'nav', title:getPageTitle(req.session.username), friends: friendsList});
 });
@@ -29,7 +29,7 @@ router.post('/add', async (req, res) => {
   } catch (e) { //something goes wrong with adding
     console.log(e);
   } finally {
-    console.log("finished the function");
+    //console.log("finished the function");
     res.redirect('/friends');
   }
 });
