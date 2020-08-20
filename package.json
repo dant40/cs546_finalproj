@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/dant40/cs546_finalproj#readme",
   "dependencies": {
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
     "ejs": "^2.4.1",
