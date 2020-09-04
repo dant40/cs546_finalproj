@@ -28,7 +28,7 @@
     "express-session": "^1.17.0",
     "express-handlebars": "^3.1.0",
     "handlebars": "^4.0.5",
-    "mongodb": "^2.2.33",
+    "mongodb": "^3.1.13",
     "path": "^0.12.7"
   }
 }
